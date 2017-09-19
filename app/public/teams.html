@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pig Skin Pickem</title>
+
+    <!-- Added link to the jQuery Library -->
+    <script src="https://code.jquery.com/jquery-3.2.1.js"></script>
+
+	<!-- Added link to Firebase -->
+    <!-- <script src="https://www.gstatic.com/firebasejs/4.0.0/firebase.js"></script> -->
+
+	<!-- Added link to moment.js -->
+    <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
+
+    <!-- Added a link to Bootstrap-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+</head>
+<body>
+
+
+<div class="container">
+
+	<!-- Jumbotron-->
+	<div class="jumbotron" style="background-color: #0489B1; color: white;">
+		<h1 class="text-center"><strong>Pig Skin Pickem</strong></h1>
+		<h3 class="text-center"><strong>Weekly Scheduled Matchups</strong></h3><br>
+		<h3 class="text-center"><strong>Select an NFL Week Number</strong></h3>
+			<form> 
+        		<div style="display: flex; justify-content: center;">
+        			<select id="myselect">
+					    <option name="week1" value="1" id="week1">Week 1</option>
+					    <option name="week2" value="2" id="week2">Week 2</option>
+					    <option name="week3" value="3" id="week3">Week 3</option>
+					    <option value="4" id="week4">Week 4</option>
+					    <option value="5" id="week5">Week 5</option>
+					    <option value="6" id="week6">Week 6</option>
+					    <option value="7" id="week7">Week 7</option>
+					    <option value="8" id="week8">Week 8</option>
+					    <option value="9" id="week9">Week 9</option>
+					    <option value="10" id="week10">Week 10</option>
+					    <option value="11" id="week11">Week 11</option>
+					    <option value="12" id="week12">Week 12</option>
+					    <option value="13" id="week13">Week 13</option>
+					    <option value="14" id="week14">Week 14</option>
+					    <option value="15" id="week15">Week 15</option>
+					    <option value="16" id="week16">Week 16</option>
+					    <option value="17" id="week17">Week 17</option> 
+					</select>
+        		</div>
+			</form>
+	</div>
+	<div class="row">
+
+    <br><br>
+
+	<form>
+		<div class="row">
+			<div class="teamsContainer">
+				<div id="week-1"></div>
+				<div id="week-2"></div>	
+				<div id="week-3"></div>	
+				<div id="week-4"></div>	
+				<div id="week-5"></div>
+				<div id="week-6"></div>	
+				<div id="week-7"></div>	
+				<div id="week-8"></div>
+				<div id="week-9"></div>
+				<div id="week-10"></div>	
+				<div id="week-11"></div>	
+				<div id="week-12"></div>
+				<div id="week-13"></div>
+				<div id="week-14"></div>	
+				<div id="week-15"></div>	
+				<div id="week-16"></div>
+				<div id="week-17"></div>
+			</div>	
+		</div>
+
+		<div class="row">
+			<div id="mnfScore">
+				<h3 style="display: flex; justify-content: center; color: black">Tie Breaker</h3>
+				<div style="display: flex; justify-content: center">
+					<label><h3 style="color:black; display: flex; justify-content: center;">Monday Night Football Total Score  </h3></label>
+            		<input type="text" placeholder=" Enter Score" id="mnf" name="mnf" size="8">
+            	</div>
+			</div>
+		</div>
+	</form>
+
+		<!--submit button -->
+	<div style="display: flex; justify-content: center;">
+		<div>
+			<button id="submitPicks" type="submit" class="btn btn-primary" style="background: linear-gradient(#e80b0b 28%, #010304 115%)">Submit</button>
+			<button type="button" class="btn btn-default" id="clearAll" style="background:#4c5d5b; color: white">Clear</button>
+		</div>	
+</div>
+
+<footer class="footer">
+	    <div class="container">
+		    <h4><a href="/api/teams">Teams</a> | <a href="https://github.com/#/#">#</a></h4>
+	    </div>
+</footer>
+
+<!-- <script src="js/showTeams.js" type="text/javascript"></script> -->
+<!-- <script src="./js/showTeams.js"></script> -->
+<!-- <script src="/../js/showTeams.js" type="text/javascript"></script> -->
+
+</body>
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+   
+	// Variables
+    var weekInput;    //This does not work
+    // weekInput = 7;   //This work	
+	// $('.teamsContainer div:not(#week-' + weekInput + ')').hide();
+	
+	showTeams();
+	$('.teamsContainer div:not(#week-3)').hide();
+
+
+	function showTeams() {
+		
+		var currentURL = window.location.origin;
+
+		$.ajax({ url: currentURL + "/api/teams", method: "GET" })
+		.done(function(teams) {
+			console.log("URL: " + currentURL + "/api/teams");
+			console.log(teams);
+
+
+		for (var i = 0; i < teams.length; i++) {
+			var awaySection = $("<div>");
+			var homeSection = $("<div>");	
+				
+			awaySection.addClass("panel panel-primary col-sm-6");
+			homeSection.addClass("panel panel-primary col-sm-6");
+			awaySection.attr("id", "ateamWell-" + i);
+			homeSection.attr("id", "hteamWell-" + i);
+			$("#week-" + teams[i].Week).append(awaySection);
+			$("#week-" + teams[i].Week).append(homeSection);
+				
+
+				matchUps();
+					
+				function matchUps() {	
+
+				var gameNumber = i + 1;
+				$("#ateamWell-" + i).append("<h4><span class='label label-primary'>" + "Away Team" + "</span> " + "<input type='radio' name=' " + gameNumber + " value='away' " + gameNumber + ">" + teams[i].awayTeam + " | " + "<strong>" + " Week " + teams[i].Week + " | " + teams[i].Date + "<strong></h4>");
+
+				$("#hteamWell-" + i).append("<h4><span class='label label-primary'>" + "Home Team" + "</span> " + "<input type='radio' name=' " + gameNumber + " value='home' " + gameNumber + ">" + teams[i].homeTeam + " | " + "<strong>" + " Week " + teams[i].Week + " | " + teams[i].Date + "<strong></h4>");
+						
+				}
+
+			}
+		});
+	}
+
+});
+
+</script>
+
+</html>

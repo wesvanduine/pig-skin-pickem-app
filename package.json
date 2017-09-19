@@ -1,0 +1,27 @@
+{
+  "name": "pig-skin-pickem-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jcdova/pig-skin-pickem-app.git"
+  },
+  "author": "jpw",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jcdova/pig-skin-pickem-app/issues"
+  },
+  "homepage": "https://github.com/jcdova/pig-skin-pickem-app#readme",
+  "dependencies": {
+    "body-parser": "^1.18.1",
+    "express": "^4.15.4",
+    "mysql2": "^1.4.2",
+    "path": "^0.12.7",
+    "sequelize": "^4.8.4"
+  }
+}
